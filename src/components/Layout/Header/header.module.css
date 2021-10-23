@@ -1,0 +1,28 @@
+.headerContainer {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.header {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  background-color: rgb(248, 252, 49);
+  height: 4rem;
+}
+
+.title {
+  color: rgb(58, 57, 57);
+  font-size: 3rem;
+  margin: 0.5rem;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+span {
+  font-weight: bolder;
+  font-size: 4rem;
+  color: rgb(184, 5, 5);
+}

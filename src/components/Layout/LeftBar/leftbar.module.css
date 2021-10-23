@@ -1,0 +1,18 @@
+.leftbarContainer {
+  display: flex;
+  flex-direction: column;
+  border-top: 4rem solid rgb(248, 252, 49);
+  background-color: lightgray;
+  height: 100vh;
+  padding-right: 8rem;
+  width: 20%;
+}
+
+.leftbarItem {
+  text-decoration: none;
+  color: black;
+  font-weight: bolder;
+  border-bottom: 1px solid rgba(172, 3, 3, 0.534);
+  text-transform: uppercase;
+  margin-right: 2rem;
+}

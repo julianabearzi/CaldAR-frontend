@@ -1,0 +1,18 @@
+* {
+  box-sizing: border-box;
+}
+.layoutContainer {
+  display: flex;
+  flex-direction: row;
+  height: 100vh;
+}
+
+.mainContainer {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.title {
+  text-decoration: none;
+}
