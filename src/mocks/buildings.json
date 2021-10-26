@@ -1,58 +1,58 @@
 [
   {
     "id": "613f9ccb385d6cf9e7581caf",
-    "name": "skyscraper",
+    "fullName": "skyscraper",
     "address": "rioja 1700",
-    "type": "msr construction",
+    "type": "construction company",
     "phone": "341345621"
   },
   {
     "id": "614a2c7291aba6a9aec46f43",
-    "name": "abc",
-    "address": "3 de febrero 3000",
+    "fullName": "abc",
+    "address": "3 de febrero 300",
     "type": "particular",
     "phone": "154989898"
   },
   {
     "id": "614a2d1c91aba6a9aec46f47",
-    "name": "mendoza",
+    "fullName": "mendoza",
     "address": "Mendoza 1000",
-    "type": "cc",
+    "type": "construction company",
     "phone": "154898080"
   },
   {
     "id": "614a2d6691aba6a9aec46f4a",
-    "name": "jbuilding",
+    "fullName": "jbuilding",
     "address": "Jujuy 2157",
-    "type": "turner",
+    "type": "construction company",
     "phone": "3436413456"
   },
   {
     "id": "614a2e5c91aba6a9aec46f52",
-    "name": "rock",
+    "fullName": "rock",
     "address": "Roca 2222",
-    "type": "msr construction",
+    "type": "construction company",
     "phone": "934934898"
   },
   {
     "id": "6168448ea32413fc5d6020ec",
-    "name": "nights",
+    "fullName": "nights",
     "address": "Sl 1500",
-    "type": "bbz",
+    "type": "construction company",
     "phone": "341341341341"
   },
   {
     "id": "616844c9a32413fc5d6020ef",
-    "name": "nights",
+    "fullName": "nights",
     "address": "Sl 1500",
     "type": "particular",
     "phone": "341341341341"
   },
   {
     "id": "61684a3c88aa0c7d524044c3",
-    "name": "building 2021",
+    "fullName": "building 2021",
     "address": "Sl 3900",
-    "type": "m2",
+    "type": "particular",
     "phone": "77777779"
   }
 ]
