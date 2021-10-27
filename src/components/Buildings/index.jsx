@@ -1,12 +1,14 @@
 import { useState, useEffect } from 'react';
-import { useHistory } from 'react-router-dom';
+import { useHistory, useParams } from 'react-router-dom';
 import BuildingsData from '../../mocks/buildings.json';
 import BuildingsList from './BuildingsList';
 import BuildingForm from './BuildingForm';
+import Modal from '../Shared/Modal';
 import styles from './buildings.module.css';
 
 function Buildings() {
   const history = useHistory();
+  const { action, buildingId } = useParams();
   const [buildings, setBuildings] = useState([]);
   const [update, setUpdate] = useState(false);
   const [currentBuilding, setCurrentBuilding] = useState({
@@ -106,9 +108,18 @@ function Buildings() {
       )}
       <BuildingsList
         buildings={buildings}
-        onDelete={deleteBuilding}
+        onDelete={(id) =>
+          getBuilding(id) && history.replace(`/buildings/delete/${id}`)
+        }
         editBuilding={editBuilding}
       />
+      {action === 'delete' && (
+        <Modal
+          onSubmit={() => deleteBuilding(buildingId)}
+          onClose={() => history.replace('/buildings')}
+          item="building"
+        />
+      )}
     </div>
   );
 }

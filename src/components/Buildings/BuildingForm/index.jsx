@@ -47,11 +47,13 @@ const BuildingForm = ({
     if (currentBuilding) {
       setUpdate(false);
     }
-    history.push('/buildings');
-    setName('');
-    setAddress('');
-    setType('');
-    setPhone('');
+    if (action !== 'delete' || !getBuilding(buildingId)) {
+      history.push('/buildings');
+      setName('');
+      setAddress('');
+      setType('');
+      setPhone('');
+    }
   };
 
   useEffect(() => {
@@ -64,7 +66,6 @@ const BuildingForm = ({
       const buildingToBeUpdated = getBuilding(buildingId);
       if (buildingToBeUpdated) {
         setUpdate(true);
-        history.push(`/buildings/update/${buildingToBeUpdated.id}`);
         setCurrentBuilding({
           id: buildingToBeUpdated.id,
           fullName: buildingToBeUpdated.fullName,
