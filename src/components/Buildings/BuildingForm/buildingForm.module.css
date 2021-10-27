@@ -32,8 +32,9 @@ label {
   flex-direction: row;
   align-items: flex-start;
 }
-.btnForm {
-  margin-top: 10px;
+.sendForm {
+  height: 20px;
+  margin-top: 5px;
   border-radius: 5px;
   padding-bottom: 0.5rem;
   cursor: pointer;
@@ -44,8 +45,22 @@ label {
   width: 100%;
   font-size: 15px;
 }
+.btnForm {
+  height: 20px;
+  margin-top: 5px;
+  border-radius: 5px;
+  padding-bottom: 0.2rem;
+  cursor: pointer;
+  background: #000;
+  color: #fff;
+  border: none;
+  font-weight: bolder;
+  width: 100%;
+  font-size: 15px;
+}
 
-.btnForm:hover {
+.btnForm:hover,
+.sendForm:hover {
   transform: scale(0.98);
   text-decoration: underline;
 }
