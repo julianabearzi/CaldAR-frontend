@@ -2,6 +2,7 @@ import React from 'react';
 import { Switch, Route, Redirect } from 'react-router-dom';
 import Layout from '../components/Layout';
 import Home from '../components/Home';
+import Buildings from '../components/Buildings';
 
 const Routes = () => {
   return (
@@ -10,6 +11,16 @@ const Routes = () => {
       <Route path="/home">
         <Layout>
           <Home />
+        </Layout>
+      </Route>
+      <Route exact path="/buildings">
+        <Layout>
+          <Buildings />
+        </Layout>
+      </Route>
+      <Route exact path="/buildings/:action/:buildingId?">
+        <Layout>
+          <Buildings />
         </Layout>
       </Route>
     </Switch>

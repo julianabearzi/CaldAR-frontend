@@ -11,6 +11,11 @@ const LeftBar = () => {
           Home
         </NavLink>
       </ul>
+      <ul>
+        <NavLink className={styles.leftbarItem} to="/buildings">
+          Buildings
+        </NavLink>
+      </ul>
     </div>
   );
 };
