@@ -1,7 +1,17 @@
 import { useState, useEffect } from 'react';
+import { useHistory, useParams } from 'react-router-dom';
 import styles from './buildingForm.module.css';
 
-const BuildingForm = ({ onAdd, updateBuilding, currentBuilding }) => {
+const BuildingForm = ({
+  onAdd,
+  updateBuilding,
+  currentBuilding,
+  setUpdate,
+  setCurrentBuilding,
+  getBuilding,
+}) => {
+  const history = useHistory();
+  const { action, buildingId } = useParams();
   const [fullName, setName] = useState('');
   const [address, setAddress] = useState('');
   const [type, setType] = useState('');
@@ -33,20 +43,42 @@ const BuildingForm = ({ onAdd, updateBuilding, currentBuilding }) => {
     setPhone('');
   };
 
+  const handleReset = () => {
+    if (currentBuilding) {
+      setUpdate(false);
+    }
+    history.push('/buildings');
+    setName('');
+    setAddress('');
+    setType('');
+    setPhone('');
+  };
+
   useEffect(() => {
     if (currentBuilding) {
       setName(currentBuilding.fullName);
       setAddress(currentBuilding.address);
       setType(currentBuilding.type);
       setPhone(currentBuilding.phone);
+    } else if (action === 'update') {
+      const buildingToBeUpdated = getBuilding(buildingId);
+      if (buildingToBeUpdated) {
+        setUpdate(true);
+        history.push(`/buildings/update/${buildingToBeUpdated.id}`);
+        setCurrentBuilding({
+          id: buildingToBeUpdated.id,
+          fullName: buildingToBeUpdated.fullName,
+          address: buildingToBeUpdated.address,
+          type: buildingToBeUpdated.type,
+          phone: buildingToBeUpdated.phone,
+        });
+      } else {
+        history.replace('/buildings');
+      }
+    } else {
+      handleReset();
     }
   }, [currentBuilding]);
-  const handleReset = () => {
-    setName('');
-    setAddress('');
-    setType('');
-    setPhone('');
-  };
 
   return (
     <div>
@@ -114,13 +146,14 @@ const BuildingForm = ({ onAdd, updateBuilding, currentBuilding }) => {
           </div>
         </div>
         <div className={styles.btnContainer}>
-          <input type="submit" value="Send" className={styles.btnForm} />
-          <input
-            type="submit"
-            value="Clear"
+          <input type="submit" value="Send" className={styles.sendForm} />
+          <button
+            type="button"
             className={styles.btnForm}
             onClick={handleReset}
-          />
+          >
+            Cancel
+          </button>
         </div>
       </form>
     </div>

@@ -18,6 +18,11 @@ const Routes = () => {
           <Buildings />
         </Layout>
       </Route>
+      <Route exact path="/buildings/:action/:buildingId?">
+        <Layout>
+          <Buildings />
+        </Layout>
+      </Route>
     </Switch>
   );
 };
