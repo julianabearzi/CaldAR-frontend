@@ -1,4 +1,5 @@
 import { GiCancel } from 'react-icons/gi';
+import PropTypes from 'prop-types';
 import styles from './modal.module.css';
 
 const Modal = ({ onSubmit, onClose, item }) => {
@@ -22,6 +23,12 @@ const Modal = ({ onSubmit, onClose, item }) => {
       </div>
     </div>
   );
+};
+
+Modal.propTypes = {
+  onClose: PropTypes.func.isRequired,
+  onSubmit: PropTypes.func.isRequired,
+  item: PropTypes.string.isRequired,
 };
 
 export default Modal;
