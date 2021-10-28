@@ -1,0 +1,71 @@
+.form {
+  display: flex;
+  flex-direction: column;
+  justify-content: left;
+  flex-wrap: wrap;
+  width: 100%;
+}
+.fieldsContainer {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: left;
+  flex-wrap: wrap;
+  width: 100%;
+}
+
+input {
+  width: 150px;
+  height: 20px;
+  font-size: 12px;
+  margin: 0.5rem;
+}
+select {
+  margin: 0.5rem;
+}
+
+label {
+  font-weight: bolder;
+}
+.btnContainer {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+}
+.sendForm {
+  height: 20px;
+  margin-top: 5px;
+  border-radius: 5px;
+  padding-bottom: 0.5rem;
+  cursor: pointer;
+  background: #000;
+  color: #fff;
+  border: none;
+  font-weight: bolder;
+  width: 100%;
+  font-size: 15px;
+}
+.btnForm {
+  height: 20px;
+  margin-top: 5px;
+  border-radius: 5px;
+  padding-bottom: 0.2rem;
+  cursor: pointer;
+  background: #000;
+  color: #fff;
+  border: none;
+  font-weight: bolder;
+  width: 100%;
+  font-size: 15px;
+}
+
+.btnForm:hover,
+.sendForm:hover {
+  transform: scale(0.98);
+  text-decoration: underline;
+}
+
+.subtitle {
+  color: rgb(58, 57, 57);
+  font-size: 100%;
+}
