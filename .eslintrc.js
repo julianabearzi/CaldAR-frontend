@@ -17,5 +17,7 @@ module.exports = {
     'react/react-in-jsx-scope': 'off',
     'react/prop-types': 'off',
     'arrow-body-style': 'off',
+    'no-param-reassign': 'off',
+    'prefer-const': 'off',
   },
 };

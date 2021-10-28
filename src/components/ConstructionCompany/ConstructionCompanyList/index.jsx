@@ -2,7 +2,11 @@ import PropTypes from 'prop-types';
 import Construction from '../Construction';
 import styles from './constructionCompanyList.module.css';
 
-const ConstructionCompanyList = ({ constructions }) => {
+const ConstructionCompanyList = ({
+  constructions,
+  onDelete,
+  editConstruction,
+}) => {
   return (
     <>
       <div className={styles.container}>
@@ -11,7 +15,12 @@ const ConstructionCompanyList = ({ constructions }) => {
           <h3 className={styles.item}>Name</h3>
         </div>
         {constructions.map((construction) => (
-          <Construction key={construction.id} construction={construction} />
+          <Construction
+            key={construction.id}
+            construction={construction}
+            onDelete={onDelete}
+            editConstruction={editConstruction}
+          />
         ))}
       </div>
     </>
