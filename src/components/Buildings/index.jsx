@@ -1,61 +1,41 @@
 import { useState, useEffect } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
-import BuildingsData from '../../mocks/buildings.json';
+import { connect } from 'react-redux';
 import BuildingsList from './BuildingsList';
 import BuildingForm from './BuildingForm';
 import Modal from '../Shared/Modal';
 import styles from './buildings.module.css';
+import {
+  getBuildings as getBuildingsAction,
+  addBuilding as addBuildingAction,
+  updateBuilding as updateBuildingAction,
+  deleteBuilding as deleteBuildingAction,
+} from '../../redux/actions/buildingActions';
 
-function Buildings() {
+function Buildings({
+  buildings,
+  getBuildings,
+  addBuilding,
+  updateBuilding,
+  deleteBuilding,
+}) {
   const history = useHistory();
   const { action, buildingId } = useParams();
-  const [buildings, setBuildings] = useState([]);
   const [update, setUpdate] = useState(false);
   const [currentBuilding, setCurrentBuilding] = useState({
     id: null,
     fullName: '',
     address: '',
-    type: '',
+    buildingType: '',
     phone: '',
   });
 
   useEffect(() => {
-    const getBuildings = () => {
-      setBuildings(BuildingsData);
-    };
-
     getBuildings();
   }, []);
 
   const getBuilding = (id) => {
-    return BuildingsData.find((b) => b.id === id);
-  };
-
-  const randomId = (array) => {
-    let actualPosition = array.length;
-    while (actualPosition !== 0) {
-      const randomPosition = Math.floor(Math.random() * actualPosition);
-      actualPosition -= 1;
-      [array[actualPosition], array[randomPosition]] = [
-        array[randomPosition],
-        array[actualPosition],
-      ];
-    }
-    return array;
-  };
-
-  const generateRandom = (amount) => {
-    const characters =
-      'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'.split(
-        ''
-      );
-    randomId(characters);
-    return characters.slice(0, amount).join('');
-  };
-
-  const addBuilding = (building) => {
-    building.id = generateRandom(24);
-    setBuildings([...buildings, building]);
+    return buildings.find((b) => b.id === id);
   };
 
   const editBuilding = (building) => {
@@ -65,23 +45,20 @@ function Buildings() {
       id: building.id,
       fullName: building.fullName,
       address: building.address,
-      type: building.type,
+      buildingType: building.buildingType,
       phone: building.phone,
     });
   };
 
-  const updateBuilding = (building) => {
+  const updateABuilding = (building) => {
     setUpdate(false);
-    const updatedBuildings = buildings.map((x) =>
-      x.id === building.id ? building : x
-    );
-    setBuildings(updatedBuildings);
+    updateBuilding(building);
     history.push('/buildings');
   };
 
-  const deleteBuilding = (id) => {
+  const deleteABuilding = (building) => {
     setUpdate(false);
-    setBuildings(buildings.filter((building) => building.id !== id));
+    deleteBuilding(building);
     history.replace('/buildings');
   };
 
@@ -93,7 +70,7 @@ function Buildings() {
           <BuildingForm
             currentBuilding={currentBuilding}
             setUpdate={setUpdate}
-            updateBuilding={updateBuilding}
+            updateABuilding={updateABuilding}
           />
         </div>
       ) : (
@@ -115,7 +92,7 @@ function Buildings() {
       />
       {action === 'delete' && (
         <Modal
-          onSubmit={() => deleteBuilding(buildingId)}
+          onSubmit={() => deleteABuilding(buildingId)}
           onClose={() => history.replace('/buildings')}
           item="building"
         />
@@ -124,4 +101,17 @@ function Buildings() {
   );
 }
 
-export default Buildings;
+const mapDispatchToProps = (dispatch) => {
+  return {
+    getBuildings: () => dispatch(getBuildingsAction()),
+    addBuilding: (building) => dispatch(addBuildingAction(building)),
+    updateBuilding: (building) => dispatch(updateBuildingAction(building)),
+    deleteBuilding: (id) => dispatch(deleteBuildingAction(id)),
+  };
+};
+
+const mapStateToProps = (state) => ({
+  buildings: state.buildings.list,
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(Buildings);

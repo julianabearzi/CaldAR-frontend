@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import styles from './building.module.css';
 
 const Building = ({ building, onDelete, editBuilding }) => {
-  const { id, fullName, address, type, phone } = building;
+  const { id, fullName, address, buildingType, phone } = building;
   return (
     <div className={styles.itemContainer}>
       <div className={styles.item}>
@@ -20,7 +20,7 @@ const Building = ({ building, onDelete, editBuilding }) => {
       </div>
       <div className={styles.item}>{fullName}</div>
       <div className={styles.item}>{address}</div>
-      <div className={styles.item}>{type}</div>
+      <div className={styles.item}>{buildingType}</div>
       <div className={styles.item}>{phone}</div>
     </div>
   );

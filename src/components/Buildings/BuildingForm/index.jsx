@@ -4,7 +4,7 @@ import styles from './buildingForm.module.css';
 
 const BuildingForm = ({
   onAdd,
-  updateBuilding,
+  updateABuilding,
   currentBuilding,
   setUpdate,
   setCurrentBuilding,
@@ -14,7 +14,7 @@ const BuildingForm = ({
   const { action, buildingId } = useParams();
   const [fullName, setName] = useState('');
   const [address, setAddress] = useState('');
-  const [type, setType] = useState('');
+  const [buildingType, setBuildingType] = useState('');
   const [phone, setPhone] = useState('');
   const options = [
     { value: '', label: '' },
@@ -24,22 +24,21 @@ const BuildingForm = ({
 
   const handleSubmit = (e) => {
     e.preventDefault();
-
     if (currentBuilding) {
-      updateBuilding({
+      updateABuilding({
         fullName,
         address,
-        type,
+        buildingType,
         phone,
         id: currentBuilding.id,
       });
     } else {
-      onAdd({ fullName, address, type, phone });
+      onAdd({ fullName, address, buildingType, phone });
     }
 
     setName('');
     setAddress('');
-    setType('');
+    setBuildingType('');
     setPhone('');
   };
 
@@ -51,7 +50,7 @@ const BuildingForm = ({
       history.push('/buildings');
       setName('');
       setAddress('');
-      setType('');
+      setBuildingType('');
       setPhone('');
     }
   };
@@ -60,7 +59,7 @@ const BuildingForm = ({
     if (currentBuilding) {
       setName(currentBuilding.fullName);
       setAddress(currentBuilding.address);
-      setType(currentBuilding.type);
+      setBuildingType(currentBuilding.buildingType);
       setPhone(currentBuilding.phone);
     } else if (action === 'update') {
       const buildingToBeUpdated = getBuilding(buildingId);
@@ -70,7 +69,7 @@ const BuildingForm = ({
           id: buildingToBeUpdated.id,
           fullName: buildingToBeUpdated.fullName,
           address: buildingToBeUpdated.address,
-          type: buildingToBeUpdated.type,
+          buildingType: buildingToBeUpdated.buildingType,
           phone: buildingToBeUpdated.phone,
         });
       } else {
@@ -119,8 +118,8 @@ const BuildingForm = ({
             <label htmlFor="type">
               Type:
               <select
-                value={type}
-                onChange={(e) => setType(e.target.value)}
+                value={buildingType}
+                onChange={(e) => setBuildingType(e.target.value)}
                 options={options}
                 required
               >
