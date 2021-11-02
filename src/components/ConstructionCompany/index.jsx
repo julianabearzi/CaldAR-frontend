@@ -1,15 +1,26 @@
 import { useState, useEffect } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
-import ConstructionsData from '../../mocks/constructionCompany.json';
+import { connect } from 'react-redux';
 import ConstructionsCompanyList from './ConstructionCompanyList';
 import ConstructionCompanyForm from './ConstructionCompanyForm';
 import Modal from '../Shared/Modal';
 import styles from './constructionCompany.module.css';
+import {
+  getConstructions as getConstructionsAction,
+  addConstruction as addConstructionAction,
+  updateConstruction as updateConstructionAction,
+  deleteConstruction as deleteConstructionAction,
+} from '../../redux/actions/constructionCompanyActions';
 
-export const ConstructionCompany = () => {
+const ConstructionCompany = ({
+  constructions,
+  getConstructions,
+  addConstruction,
+  updateConstruction,
+  deleteConstruction,
+}) => {
   const history = useHistory();
   const { action, constructionId } = useParams();
-  const [constructions, setConstructions] = useState([]);
   const [update, setUpdate] = useState(false);
   const [currentConstruction, setCurrentConstruction] = useState({
     id: null,
@@ -17,42 +28,11 @@ export const ConstructionCompany = () => {
   });
 
   useEffect(() => {
-    const getConstructions = () => {
-      setConstructions(ConstructionsData);
-    };
-
     getConstructions();
   }, []);
 
   const getConstruction = (id) => {
-    return ConstructionsData.find((c) => c.id === id);
-  };
-
-  const randomId = (array) => {
-    let actualPosition = array.length;
-    while (actualPosition !== 0) {
-      const randomPosition = Math.floor(Math.random() * actualPosition);
-      actualPosition -= 1;
-      [array[actualPosition], array[randomPosition]] = [
-        array[randomPosition],
-        array[actualPosition],
-      ];
-    }
-    return array;
-  };
-
-  const generateRandom = (amount) => {
-    const characters =
-      'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'.split(
-        ''
-      );
-    randomId(characters);
-    return characters.slice(0, amount).join('');
-  };
-
-  const addConstruction = (construction) => {
-    construction.id = generateRandom(24);
-    setConstructions([...constructions, construction]);
+    return constructions.find((c) => c.id === id);
   };
 
   const editConstruction = (construction) => {
@@ -64,20 +44,15 @@ export const ConstructionCompany = () => {
     });
   };
 
-  const updateConstruction = (construction) => {
+  const updateAConstruction = (construction) => {
     setUpdate(false);
-    const updatedConstructions = constructions.map((x) =>
-      x.id === construction.id ? construction : x
-    );
-    setConstructions(updatedConstructions);
+    updateConstruction(construction);
     history.push('/constructions');
   };
 
-  const deleteConstruction = (id) => {
+  const deleteAConstruction = (construction) => {
     setUpdate(false);
-    setConstructions(
-      constructions.filter((construction) => construction.id !== id)
-    );
+    deleteConstruction(construction);
     history.replace('/constructions');
   };
 
@@ -89,7 +64,7 @@ export const ConstructionCompany = () => {
           <ConstructionCompanyForm
             currentConstruction={currentConstruction}
             setUpdate={setUpdate}
-            updateConstruction={updateConstruction}
+            updateAConstruction={updateAConstruction}
           />
         </div>
       ) : (
@@ -111,7 +86,7 @@ export const ConstructionCompany = () => {
       />
       {action === 'delete' && (
         <Modal
-          onSubmit={() => deleteConstruction(constructionId)}
+          onSubmit={() => deleteAConstruction(constructionId)}
           onClose={() => history.replace('/constructions')}
           item="construction"
         />
@@ -120,4 +95,22 @@ export const ConstructionCompany = () => {
   );
 };
 
-export default ConstructionCompany;
+const mapDispatchToProps = (dispatch) => {
+  return {
+    getConstructions: () => dispatch(getConstructionsAction()),
+    addConstruction: (construction) =>
+      dispatch(addConstructionAction(construction)),
+    updateConstruction: (construction) =>
+      dispatch(updateConstructionAction(construction)),
+    deleteConstruction: (id) => dispatch(deleteConstructionAction(id)),
+  };
+};
+
+const mapStateToProps = (state) => ({
+  constructions: state.constructions.list,
+});
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(ConstructionCompany);
