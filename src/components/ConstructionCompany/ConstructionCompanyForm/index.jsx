@@ -4,7 +4,7 @@ import styles from './constructionCompanyForm.module.css';
 
 const ConstructionCompanyForm = ({
   onAdd,
-  updateConstruction,
+  updateAConstruction,
   currentConstruction,
   setUpdate,
   setCurrentConstruction,
@@ -18,7 +18,7 @@ const ConstructionCompanyForm = ({
     e.preventDefault();
 
     if (currentConstruction) {
-      updateConstruction({
+      updateAConstruction({
         name,
         id: currentConstruction.id,
       });
