@@ -12,13 +12,13 @@ import {
   deleteBuilding as deleteBuildingAction,
 } from '../../redux/actions/buildingActions';
 
-function Buildings({
+const Buildings = ({
   buildings,
   getBuildings,
   addBuilding,
   updateBuilding,
   deleteBuilding,
-}) {
+}) => {
   const history = useHistory();
   const { action, buildingId } = useParams();
   const [update, setUpdate] = useState(false);
@@ -26,7 +26,7 @@ function Buildings({
     id: null,
     fullName: '',
     address: '',
-    buildingType: '',
+    type: '',
     phone: '',
   });
 
@@ -45,7 +45,7 @@ function Buildings({
       id: building.id,
       fullName: building.fullName,
       address: building.address,
-      buildingType: building.buildingType,
+      type: building.type,
       phone: building.phone,
     });
   };
@@ -99,7 +99,7 @@ function Buildings({
       )}
     </div>
   );
-}
+};
 
 const mapDispatchToProps = (dispatch) => {
   return {

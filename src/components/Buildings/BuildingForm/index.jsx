@@ -14,7 +14,7 @@ const BuildingForm = ({
   const { action, buildingId } = useParams();
   const [fullName, setName] = useState('');
   const [address, setAddress] = useState('');
-  const [buildingType, setBuildingType] = useState('');
+  const [type, setType] = useState('');
   const [phone, setPhone] = useState('');
   const options = [
     { value: '', label: '' },
@@ -28,17 +28,17 @@ const BuildingForm = ({
       updateABuilding({
         fullName,
         address,
-        buildingType,
+        type,
         phone,
         id: currentBuilding.id,
       });
     } else {
-      onAdd({ fullName, address, buildingType, phone });
+      onAdd({ fullName, address, type, phone });
     }
 
     setName('');
     setAddress('');
-    setBuildingType('');
+    setType('');
     setPhone('');
   };
 
@@ -50,7 +50,7 @@ const BuildingForm = ({
       history.push('/buildings');
       setName('');
       setAddress('');
-      setBuildingType('');
+      setType('');
       setPhone('');
     }
   };
@@ -59,7 +59,7 @@ const BuildingForm = ({
     if (currentBuilding) {
       setName(currentBuilding.fullName);
       setAddress(currentBuilding.address);
-      setBuildingType(currentBuilding.buildingType);
+      setType(currentBuilding.type);
       setPhone(currentBuilding.phone);
     } else if (action === 'update') {
       const buildingToBeUpdated = getBuilding(buildingId);
@@ -69,7 +69,7 @@ const BuildingForm = ({
           id: buildingToBeUpdated.id,
           fullName: buildingToBeUpdated.fullName,
           address: buildingToBeUpdated.address,
-          buildingType: buildingToBeUpdated.buildingType,
+          type: buildingToBeUpdated.type,
           phone: buildingToBeUpdated.phone,
         });
       } else {
@@ -118,8 +118,8 @@ const BuildingForm = ({
             <label htmlFor="type">
               Type:
               <select
-                value={buildingType}
-                onChange={(e) => setBuildingType(e.target.value)}
+                value={type}
+                onChange={(e) => setType(e.target.value)}
                 options={options}
                 required
               >
