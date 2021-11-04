@@ -4,7 +4,7 @@ import styles from './buildingForm.module.css';
 
 const BuildingForm = ({
   onAdd,
-  updateBuilding,
+  updateABuilding,
   currentBuilding,
   setUpdate,
   setCurrentBuilding,
@@ -24,9 +24,8 @@ const BuildingForm = ({
 
   const handleSubmit = (e) => {
     e.preventDefault();
-
     if (currentBuilding) {
-      updateBuilding({
+      updateABuilding({
         fullName,
         address,
         type,
