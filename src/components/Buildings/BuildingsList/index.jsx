@@ -13,9 +13,10 @@ const BuildingList = ({ buildings, onDelete, editBuilding }) => {
           <h3 className={styles.item}>Type</h3>
           <h3 className={styles.item}>Phone</h3>
         </div>
-        {buildings.map((currentBuilding) => (
+        {buildings.list.map((currentBuilding) => (
           <Building
-            key={currentBuilding.id}
+            // eslint-disable-next-line no-underscore-dangle
+            key={currentBuilding._id}
             building={currentBuilding}
             onDelete={onDelete}
             editBuilding={editBuilding}
@@ -27,7 +28,7 @@ const BuildingList = ({ buildings, onDelete, editBuilding }) => {
 };
 
 BuildingList.propTypes = {
-  buildings: PropTypes.instanceOf(Array).isRequired,
+  buildings: PropTypes.instanceOf(Object).isRequired,
   onDelete: PropTypes.func.isRequired,
   editBuilding: PropTypes.func.isRequired,
 };

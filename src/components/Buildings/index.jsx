@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
-import { connect } from 'react-redux';
+import { connect, useSelector } from 'react-redux';
+import { bindActionCreators } from 'redux';
 import BuildingsList from './BuildingsList';
 import BuildingForm from './BuildingForm';
 import Modal from '../Shared/Modal';
@@ -19,12 +20,13 @@ const Buildings = ({
   updateBuilding,
   deleteBuilding,
 }) => {
+  const buildingsList = useSelector((state) => state.buildings.list);
   const history = useHistory();
   const { action, buildingId } = useParams();
   const [update, setUpdate] = useState(false);
   const [currentBuilding, setCurrentBuilding] = useState({
-    id: null,
-    fullName: '',
+    _id: null,
+    name: '',
     address: '',
     type: '',
     phone: '',
@@ -35,15 +37,18 @@ const Buildings = ({
   }, []);
 
   const getBuilding = (id) => {
-    return buildings.find((b) => b.id === id);
+    return (
+      // eslint-disable-next-line no-underscore-dangle
+      buildingsList.find((b) => b._id === id)
+    );
   };
 
   const editBuilding = (building) => {
     setUpdate(true);
     history.push(`/buildings/update/${building.id}`);
     setCurrentBuilding({
-      id: building.id,
-      fullName: building.fullName,
+      _id: building.id,
+      name: building.fullName,
       address: building.address,
       type: building.type,
       phone: building.phone,
@@ -102,16 +107,19 @@ const Buildings = ({
 };
 
 const mapDispatchToProps = (dispatch) => {
-  return {
-    getBuildings: () => dispatch(getBuildingsAction()),
-    addBuilding: (building) => dispatch(addBuildingAction(building)),
-    updateBuilding: (building) => dispatch(updateBuildingAction(building)),
-    deleteBuilding: (id) => dispatch(deleteBuildingAction(id)),
-  };
+  return bindActionCreators(
+    {
+      getBuildings: getBuildingsAction,
+      addBuilding: addBuildingAction,
+      updateBuilding: updateBuildingAction,
+      deleteBuilding: deleteBuildingAction,
+    },
+    dispatch
+  );
 };
 
 const mapStateToProps = (state) => ({
-  buildings: state.buildings.list,
+  buildings: state.buildings,
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Buildings);

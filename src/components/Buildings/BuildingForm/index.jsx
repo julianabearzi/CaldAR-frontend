@@ -12,28 +12,23 @@ const BuildingForm = ({
 }) => {
   const history = useHistory();
   const { action, buildingId } = useParams();
-  const [fullName, setName] = useState('');
+  const [name, setName] = useState('');
   const [address, setAddress] = useState('');
   const [type, setType] = useState('');
   const [phone, setPhone] = useState('');
-  const options = [
-    { value: '', label: '' },
-    { value: 'particular', label: 'Particular' },
-    { value: 'construction company', label: 'Construction company' },
-  ];
 
   const handleSubmit = (e) => {
     e.preventDefault();
     if (currentBuilding) {
       updateABuilding({
-        fullName,
+        name,
         address,
         type,
         phone,
         id: currentBuilding.id,
       });
     } else {
-      onAdd({ fullName, address, type, phone });
+      onAdd({ name, address, type, phone });
     }
 
     setName('');
@@ -57,7 +52,7 @@ const BuildingForm = ({
 
   useEffect(() => {
     if (currentBuilding) {
-      setName(currentBuilding.fullName);
+      setName(currentBuilding.name);
       setAddress(currentBuilding.address);
       setType(currentBuilding.type);
       setPhone(currentBuilding.phone);
@@ -67,7 +62,7 @@ const BuildingForm = ({
         setUpdate(true);
         setCurrentBuilding({
           id: buildingToBeUpdated.id,
-          fullName: buildingToBeUpdated.fullName,
+          name: buildingToBeUpdated.name,
           address: buildingToBeUpdated.address,
           type: buildingToBeUpdated.type,
           phone: buildingToBeUpdated.phone,
@@ -88,13 +83,13 @@ const BuildingForm = ({
       <form className={styles.form} onSubmit={handleSubmit}>
         <div className={styles.fieldsContainer}>
           <div>
-            <label htmlFor="fullName">
+            <label htmlFor="name">
               {' '}
               Name:
               <input
                 type="text"
                 placeholder="Add name"
-                value={fullName}
+                value={name}
                 onChange={(e) => setName(e.target.value)}
                 maxLength="10"
                 required
@@ -117,7 +112,15 @@ const BuildingForm = ({
           <div>
             <label htmlFor="type">
               Type:
-              <select
+              <input
+                type="text"
+                placeholder="Add type"
+                value={type}
+                onChange={(e) => setType(e.target.value)}
+                maxLength="24"
+                required
+              />
+              {/*            <select
                 value={type}
                 onChange={(e) => setType(e.target.value)}
                 options={options}
@@ -129,7 +132,7 @@ const BuildingForm = ({
                     {o.label}
                   </option>
                 ))}
-              </select>
+              </select> */}
             </label>
           </div>
           <div>
