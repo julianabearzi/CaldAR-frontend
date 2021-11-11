@@ -16,7 +16,7 @@ const ConstructionCompanyList = ({
         </div>
         {constructions.map((construction) => (
           <Construction
-            key={construction.id}
+            key={construction._id}
             construction={construction}
             onDelete={onDelete}
             editConstruction={editConstruction}
@@ -28,6 +28,8 @@ const ConstructionCompanyList = ({
 };
 
 ConstructionCompanyList.propTypes = {
-  constructions: PropTypes.instanceOf(Array).isRequired,
+  constructions: PropTypes.instanceOf(Object).isRequired,
+  onDelete: PropTypes.func.isRequired,
+  editConstruction: PropTypes.func.isRequired,
 };
 export default ConstructionCompanyList;

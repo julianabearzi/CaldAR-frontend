@@ -7,7 +7,6 @@ const ConstructionCompanyForm = ({
   updateAConstruction,
   currentConstruction,
   setUpdate,
-  setCurrentConstruction,
   getConstruction,
 }) => {
   const history = useHistory();
@@ -19,8 +18,8 @@ const ConstructionCompanyForm = ({
 
     if (currentConstruction) {
       updateAConstruction({
+        _id: currentConstruction._id,
         name,
-        id: currentConstruction.id,
       });
     } else {
       onAdd({ name });
@@ -42,17 +41,6 @@ const ConstructionCompanyForm = ({
   useEffect(() => {
     if (currentConstruction) {
       setName(currentConstruction.name);
-    } else if (action === 'update') {
-      const constructionToBeUpdated = getConstruction(constructionId);
-      if (constructionToBeUpdated) {
-        setUpdate(true);
-        setCurrentConstruction({
-          id: constructionToBeUpdated.id,
-          name: constructionToBeUpdated.name,
-        });
-      } else {
-        history.replace('/constructions');
-      }
     } else {
       handleReset();
     }

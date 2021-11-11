@@ -3,14 +3,14 @@ import PropTypes from 'prop-types';
 import styles from './construction.module.css';
 
 const Construction = ({ construction, onDelete, editConstruction }) => {
-  const { id, name } = construction;
+  const { _id, name } = construction;
   return (
     <div className={styles.itemContainer}>
       <div className={styles.item}>
         <FaTimes
           className={styles.btn}
           style={{ cursor: 'pointer' }}
-          onClick={() => onDelete(id)}
+          onClick={() => onDelete(_id)}
         />
         <FaEdit
           className={styles.btn}
