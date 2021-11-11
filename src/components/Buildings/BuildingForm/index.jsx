@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 import styles from './buildingForm.module.css';
 
 const BuildingForm = ({
@@ -7,9 +8,9 @@ const BuildingForm = ({
   updateABuilding,
   currentBuilding,
   setUpdate,
-  setCurrentBuilding,
   getBuilding,
 }) => {
+  const constructions = useSelector((state) => state.constructions.list);
   const history = useHistory();
   const { action, buildingId } = useParams();
   const [name, setName] = useState('');
@@ -19,13 +20,16 @@ const BuildingForm = ({
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    if (type.length === 0) {
+      return;
+    }
     if (currentBuilding) {
       updateABuilding({
+        _id: currentBuilding._id,
         name,
         address,
         type,
         phone,
-        id: currentBuilding.id,
       });
     } else {
       onAdd({ name, address, type, phone });
@@ -56,20 +60,6 @@ const BuildingForm = ({
       setAddress(currentBuilding.address);
       setType(currentBuilding.type);
       setPhone(currentBuilding.phone);
-    } else if (action === 'update') {
-      const buildingToBeUpdated = getBuilding(buildingId);
-      if (buildingToBeUpdated) {
-        setUpdate(true);
-        setCurrentBuilding({
-          id: buildingToBeUpdated.id,
-          name: buildingToBeUpdated.name,
-          address: buildingToBeUpdated.address,
-          type: buildingToBeUpdated.type,
-          phone: buildingToBeUpdated.phone,
-        });
-      } else {
-        history.replace('/buildings');
-      }
     } else {
       handleReset();
     }
@@ -91,7 +81,7 @@ const BuildingForm = ({
                 placeholder="Add name"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
-                maxLength="10"
+                maxLength="15"
                 required
               />
             </label>
@@ -112,27 +102,21 @@ const BuildingForm = ({
           <div>
             <label htmlFor="type">
               Type:
-              <input
-                type="text"
-                placeholder="Add type"
-                value={type}
-                onChange={(e) => setType(e.target.value)}
-                maxLength="24"
+              <select
                 required
-              />
-              {/*            <select
-                value={type}
                 onChange={(e) => setType(e.target.value)}
-                options={options}
-                required
+                value={type}
+                name="type"
               >
-                {' '}
-                {options.map((o) => (
-                  <option key={o.value} value={o.value}>
-                    {o.label}
-                  </option>
-                ))}
-              </select> */}
+                <option value=""> </option>
+                {constructions.map((t) => {
+                  return (
+                    <option key={t.id} value={t.id}>
+                      {t.name}
+                    </option>
+                  );
+                })}
+              </select>
             </label>
           </div>
           <div>

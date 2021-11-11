@@ -15,7 +15,6 @@ const BuildingList = ({ buildings, onDelete, editBuilding }) => {
         </div>
         {buildings.list.map((currentBuilding) => (
           <Building
-            // eslint-disable-next-line no-underscore-dangle
             key={currentBuilding._id}
             building={currentBuilding}
             onDelete={onDelete}

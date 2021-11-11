@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
 import { connect, useSelector } from 'react-redux';
 import { bindActionCreators } from 'redux';
@@ -7,7 +7,6 @@ import BuildingForm from './BuildingForm';
 import Modal from '../Shared/Modal';
 import styles from './buildings.module.css';
 import {
-  getBuildings as getBuildingsAction,
   addBuilding as addBuildingAction,
   updateBuilding as updateBuildingAction,
   deleteBuilding as deleteBuildingAction,
@@ -15,11 +14,11 @@ import {
 
 const Buildings = ({
   buildings,
-  getBuildings,
   addBuilding,
   updateBuilding,
   deleteBuilding,
 }) => {
+  const constructions = useSelector((state) => state.constructions.list);
   const buildingsList = useSelector((state) => state.buildings.list);
   const history = useHistory();
   const { action, buildingId } = useParams();
@@ -32,32 +31,27 @@ const Buildings = ({
     phone: '',
   });
 
-  useEffect(() => {
-    getBuildings();
-  }, []);
-
   const getBuilding = (id) => {
-    return (
-      // eslint-disable-next-line no-underscore-dangle
-      buildingsList.find((b) => b._id === id)
-    );
+    return buildingsList.find((b) => b._id === id);
   };
 
   const editBuilding = (building) => {
+    const construction = constructions.find((x) => x.id === building.type);
     setUpdate(true);
-    history.push(`/buildings/update/${building.id}`);
+    const id = building._id;
+    history.push(`/buildings/update/${id}`);
     setCurrentBuilding({
-      _id: building.id,
-      name: building.fullName,
+      _id: building._id,
+      name: building.name,
       address: building.address,
-      type: building.type,
+      type: construction.name,
       phone: building.phone,
     });
   };
 
   const updateABuilding = (building) => {
     setUpdate(false);
-    updateBuilding(building);
+    updateBuilding(building, buildingId);
     history.push('/buildings');
   };
 
@@ -76,6 +70,7 @@ const Buildings = ({
             currentBuilding={currentBuilding}
             setUpdate={setUpdate}
             updateABuilding={updateABuilding}
+            getBuilding={getBuilding}
           />
         </div>
       ) : (
@@ -88,6 +83,7 @@ const Buildings = ({
           />
         </div>
       )}
+      {buildings.isLoading ? <h3>LOADING...</h3> : null}
       <BuildingsList
         buildings={buildings}
         onDelete={(id) =>
@@ -109,7 +105,6 @@ const Buildings = ({
 const mapDispatchToProps = (dispatch) => {
   return bindActionCreators(
     {
-      getBuildings: getBuildingsAction,
       addBuilding: addBuildingAction,
       updateBuilding: updateBuildingAction,
       deleteBuilding: deleteBuildingAction,
