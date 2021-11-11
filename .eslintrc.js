@@ -19,6 +19,7 @@ module.exports = {
     'arrow-body-style': 'off',
     'no-param-reassign': 'off',
     'prefer-const': 'off',
+    'no-underscore-dangle': 'off',
     'import/no-extraneous-dependencies': ['error', { devDependencies: true }],
   },
 };

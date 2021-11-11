@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 import styles from './buildingForm.module.css';
 
 const BuildingForm = ({
@@ -7,33 +8,31 @@ const BuildingForm = ({
   updateABuilding,
   currentBuilding,
   setUpdate,
-  setCurrentBuilding,
   getBuilding,
 }) => {
+  const constructions = useSelector((state) => state.constructions.list);
   const history = useHistory();
   const { action, buildingId } = useParams();
-  const [fullName, setName] = useState('');
+  const [name, setName] = useState('');
   const [address, setAddress] = useState('');
   const [type, setType] = useState('');
   const [phone, setPhone] = useState('');
-  const options = [
-    { value: '', label: '' },
-    { value: 'particular', label: 'Particular' },
-    { value: 'construction company', label: 'Construction company' },
-  ];
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    if (type.length === 0) {
+      return;
+    }
     if (currentBuilding) {
       updateABuilding({
-        fullName,
+        _id: currentBuilding._id,
+        name,
         address,
         type,
         phone,
-        id: currentBuilding.id,
       });
     } else {
-      onAdd({ fullName, address, type, phone });
+      onAdd({ name, address, type, phone });
     }
 
     setName('');
@@ -57,24 +56,10 @@ const BuildingForm = ({
 
   useEffect(() => {
     if (currentBuilding) {
-      setName(currentBuilding.fullName);
+      setName(currentBuilding.name);
       setAddress(currentBuilding.address);
       setType(currentBuilding.type);
       setPhone(currentBuilding.phone);
-    } else if (action === 'update') {
-      const buildingToBeUpdated = getBuilding(buildingId);
-      if (buildingToBeUpdated) {
-        setUpdate(true);
-        setCurrentBuilding({
-          id: buildingToBeUpdated.id,
-          fullName: buildingToBeUpdated.fullName,
-          address: buildingToBeUpdated.address,
-          type: buildingToBeUpdated.type,
-          phone: buildingToBeUpdated.phone,
-        });
-      } else {
-        history.replace('/buildings');
-      }
     } else {
       handleReset();
     }
@@ -88,15 +73,15 @@ const BuildingForm = ({
       <form className={styles.form} onSubmit={handleSubmit}>
         <div className={styles.fieldsContainer}>
           <div>
-            <label htmlFor="fullName">
+            <label htmlFor="name">
               {' '}
               Name:
               <input
                 type="text"
                 placeholder="Add name"
-                value={fullName}
+                value={name}
                 onChange={(e) => setName(e.target.value)}
-                maxLength="10"
+                maxLength="15"
                 required
               />
             </label>
@@ -118,17 +103,19 @@ const BuildingForm = ({
             <label htmlFor="type">
               Type:
               <select
-                value={type}
-                onChange={(e) => setType(e.target.value)}
-                options={options}
                 required
+                onChange={(e) => setType(e.target.value)}
+                value={type}
+                name="type"
               >
-                {' '}
-                {options.map((o) => (
-                  <option key={o.value} value={o.value}>
-                    {o.label}
-                  </option>
-                ))}
+                <option value=""> </option>
+                {constructions.map((t) => {
+                  return (
+                    <option key={t.id} value={t.id}>
+                      {t.name}
+                    </option>
+                  );
+                })}
               </select>
             </label>
           </div>
