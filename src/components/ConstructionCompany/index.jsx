@@ -1,12 +1,12 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
-import { connect } from 'react-redux';
+import { connect, useSelector } from 'react-redux';
+import { bindActionCreators } from 'redux';
 import ConstructionsCompanyList from './ConstructionCompanyList';
 import ConstructionCompanyForm from './ConstructionCompanyForm';
 import Modal from '../Shared/Modal';
 import styles from './constructionCompany.module.css';
 import {
-  getConstructions as getConstructionsAction,
   addConstruction as addConstructionAction,
   updateConstruction as updateConstructionAction,
   deleteConstruction as deleteConstructionAction,
@@ -14,7 +14,6 @@ import {
 
 const ConstructionCompany = ({
   constructions,
-  getConstructions,
   addConstruction,
   updateConstruction,
   deleteConstruction,
@@ -23,30 +22,28 @@ const ConstructionCompany = ({
   const { action, constructionId } = useParams();
   const [update, setUpdate] = useState(false);
   const [currentConstruction, setCurrentConstruction] = useState({
-    id: null,
+    _id: null,
     name: '',
   });
-
-  useEffect(() => {
-    getConstructions();
-  }, []);
+  const constructionsList = useSelector((state) => state.constructions.list);
 
   const getConstruction = (id) => {
-    return constructions.find((c) => c.id === id);
+    return constructionsList.find((c) => c._id === id);
   };
 
   const editConstruction = (construction) => {
     setUpdate(true);
-    history.push(`/constructions/update/${construction.id}`);
+    const id = construction._id;
+    history.push(`/constructions/update/${id}`);
     setCurrentConstruction({
-      id: construction.id,
+      _id: construction._id,
       name: construction.name,
     });
   };
 
   const updateAConstruction = (construction) => {
     setUpdate(false);
-    updateConstruction(construction);
+    updateConstruction(construction, constructionId);
     history.push('/constructions');
   };
 
@@ -54,6 +51,10 @@ const ConstructionCompany = ({
     setUpdate(false);
     deleteConstruction(construction);
     history.replace('/constructions');
+  };
+  const handleCancel = () => {
+    setUpdate(false);
+    history.push('/constructions');
   };
 
   return (
@@ -77,6 +78,7 @@ const ConstructionCompany = ({
           />
         </div>
       )}
+      {constructions.isLoading ? <h3>LOADING...</h3> : null}
       <ConstructionsCompanyList
         constructions={constructions}
         onDelete={(id) =>
@@ -87,7 +89,7 @@ const ConstructionCompany = ({
       {action === 'delete' && (
         <Modal
           onSubmit={() => deleteAConstruction(constructionId)}
-          onClose={() => history.replace('/constructions')}
+          onClose={() => handleCancel()}
           item="construction"
         />
       )}
@@ -96,14 +98,14 @@ const ConstructionCompany = ({
 };
 
 const mapDispatchToProps = (dispatch) => {
-  return {
-    getConstructions: () => dispatch(getConstructionsAction()),
-    addConstruction: (construction) =>
-      dispatch(addConstructionAction(construction)),
-    updateConstruction: (construction) =>
-      dispatch(updateConstructionAction(construction)),
-    deleteConstruction: (id) => dispatch(deleteConstructionAction(id)),
-  };
+  return bindActionCreators(
+    {
+      addConstruction: addConstructionAction,
+      updateConstruction: updateConstructionAction,
+      deleteConstruction: deleteConstructionAction,
+    },
+    dispatch
+  );
 };
 
 const mapStateToProps = (state) => ({
