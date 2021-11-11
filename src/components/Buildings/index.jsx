@@ -36,7 +36,7 @@ const Buildings = ({
   };
 
   const editBuilding = (building) => {
-    const construction = constructions.find((x) => x.id === building.type);
+    const construction = constructions.find((x) => x._id === building.type);
     setUpdate(true);
     const id = building._id;
     history.push(`/buildings/update/${id}`);
@@ -52,6 +52,11 @@ const Buildings = ({
   const updateABuilding = (building) => {
     setUpdate(false);
     updateBuilding(building, buildingId);
+    history.push('/buildings');
+  };
+
+  const handleCancel = () => {
+    setUpdate(false);
     history.push('/buildings');
   };
 
@@ -94,7 +99,7 @@ const Buildings = ({
       {action === 'delete' && (
         <Modal
           onSubmit={() => deleteABuilding(buildingId)}
-          onClose={() => history.replace('/buildings')}
+          onClose={() => handleCancel()}
           item="building"
         />
       )}

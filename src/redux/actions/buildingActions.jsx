@@ -30,7 +30,7 @@ export const getBuildingsRejected = () => ({
 
 export const getBuildings = () => (dispatch) => {
   dispatch(getBuildingsFetching());
-  return fetch(URL)
+  return fetch(`${URL}/buildings`)
     .then((data) => data.json())
     .then((response) => {
       dispatch(getBuildingsFulfilled(response));
@@ -55,7 +55,7 @@ export const addBuildingRejected = () => ({
 
 export const addBuilding = (building) => (dispatch) => {
   dispatch(addBuildingFetching());
-  return fetch(URL, {
+  return fetch(`${URL}/buildings`, {
     method: 'POST',
     headers: {
       'Content-type': 'application/json',
@@ -89,7 +89,7 @@ export const updateBuildingRejected = () => ({
 
 export const updateBuilding = (building, id) => (dispatch) => {
   dispatch(updateBuildingFetching());
-  return fetch(`${URL}/${id}`, {
+  return fetch(`${URL}/buildings/${id}`, {
     method: 'PUT',
     headers: {
       'Content-type': 'application/json',
@@ -120,7 +120,7 @@ export const deleteBuildingRejected = () => ({
 
 export const deleteBuilding = (id) => (dispatch) => {
   dispatch(addBuildingFetching());
-  return fetch(`${URL}/${id}`, {
+  return fetch(`${URL}/buildings/${id}`, {
     method: 'DELETE',
   })
     .then((data) => data.json())

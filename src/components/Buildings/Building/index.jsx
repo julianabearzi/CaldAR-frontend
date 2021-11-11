@@ -7,7 +7,7 @@ const Building = ({ building, onDelete, editBuilding }) => {
   const { _id, name, address, type, phone } = building;
 
   const construction = useSelector((state) =>
-    state.constructions.list.find((x) => x.id === type)
+    state.constructions.list.find((x) => x._id === type)
   );
 
   return (
