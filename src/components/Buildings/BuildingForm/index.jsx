@@ -111,7 +111,7 @@ const BuildingForm = ({
                 <option value=""> </option>
                 {constructions.map((t) => {
                   return (
-                    <option key={t.id} value={t.id}>
+                    <option key={t._id} value={t.id}>
                       {t.name}
                     </option>
                   );
