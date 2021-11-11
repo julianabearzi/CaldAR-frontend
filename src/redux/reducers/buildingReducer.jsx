@@ -5,7 +5,9 @@ import {
   ADD_BUILDING_FETCHING,
   ADD_BUILDING_FULFILLED,
   ADD_BUILDING_REJECTED,
-  UPDATE_BUILDING,
+  UPDATE_BUILDING_FETCHING,
+  UPDATE_BUILDING_FULFILLED,
+  UPDATE_BUILDING_REJECTED,
   DELETE_BUILDING_FETCHING,
   DELETE_BUILDING_FULFILLED,
   DELETE_BUILDING_REJECTED,
@@ -53,17 +55,29 @@ const buildingReducer = (state = initialState, action) => {
         isLoading: false,
         error: true,
       };
-    case UPDATE_BUILDING:
+    case UPDATE_BUILDING_FETCHING:
       return {
         ...state,
+        isLoading: true,
+      };
+    case UPDATE_BUILDING_FULFILLED:
+      return {
+        ...state,
+        isLoading: false,
         list: state.list.map((building) => {
-          if (building.id === action.building.id) {
-            const updatedBuilding = action.building;
-            updatedBuilding.id = action.building.id;
+          if (building._id === action.payload.id) {
+            const updatedBuilding = action.payload.building;
+            updatedBuilding.id = action.payload.id;
             return updatedBuilding;
           }
           return building;
         }),
+      };
+    case UPDATE_BUILDING_REJECTED:
+      return {
+        ...state,
+        isLoading: false,
+        error: true,
       };
     case DELETE_BUILDING_FETCHING:
       return {
@@ -75,7 +89,6 @@ const buildingReducer = (state = initialState, action) => {
         ...state,
         isLoading: false,
         list: [
-          // eslint-disable-next-line no-underscore-dangle
           ...state.list.filter((building) => building._id !== action.payload),
         ],
       };

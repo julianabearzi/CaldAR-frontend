@@ -5,13 +5,15 @@ import {
   ADD_BUILDING_FETCHING,
   ADD_BUILDING_FULFILLED,
   ADD_BUILDING_REJECTED,
-  UPDATE_BUILDING,
+  UPDATE_BUILDING_FETCHING,
+  UPDATE_BUILDING_FULFILLED,
+  UPDATE_BUILDING_REJECTED,
   DELETE_BUILDING_FETCHING,
   DELETE_BUILDING_FULFILLED,
   DELETE_BUILDING_REJECTED,
 } from '../types/buildingActionTypes';
 
-const URL = 'http://localhost:4000/buildings';
+const URL = process.env.REACT_APP_BACKEND_URL;
 
 export const getBuildingsFetching = () => ({
   type: GET_BUILDINGS_FETCHING,
@@ -69,10 +71,39 @@ export const addBuilding = (building) => (dispatch) => {
     });
 };
 
-export const updateBuilding = (building) => ({
-  type: UPDATE_BUILDING,
-  building,
+export const updateBuildingFetching = () => ({
+  type: UPDATE_BUILDING_FETCHING,
 });
+
+export const updateBuildingFulfilled = (building, id) => ({
+  type: UPDATE_BUILDING_FULFILLED,
+  payload: {
+    building,
+    id,
+  },
+});
+
+export const updateBuildingRejected = () => ({
+  type: UPDATE_BUILDING_REJECTED,
+});
+
+export const updateBuilding = (building, id) => (dispatch) => {
+  dispatch(updateBuildingFetching());
+  return fetch(`${URL}/${id}`, {
+    method: 'PUT',
+    headers: {
+      'Content-type': 'application/json',
+    },
+    body: JSON.stringify(building),
+  })
+    .then((data) => data.json())
+    .then((response) => {
+      dispatch(updateBuildingFulfilled(response, id));
+    })
+    .catch(() => {
+      dispatch(updateBuildingRejected());
+    });
+};
 
 export const deleteBuildingFetching = () => ({
   type: DELETE_BUILDING_FETCHING,
