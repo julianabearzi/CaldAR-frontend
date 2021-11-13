@@ -1,7 +1,9 @@
 import { useState, useEffect } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
-import { useSelector } from 'react-redux';
+import { connect, useSelector } from 'react-redux';
+import { bindActionCreators } from 'redux';
 import styles from './buildingForm.module.css';
+import { getBuilding as getBuildingAction } from '../../../redux/actions/buildingActions';
 
 const BuildingForm = ({
   onAdd,
@@ -9,6 +11,7 @@ const BuildingForm = ({
   currentBuilding,
   setUpdate,
   getBuilding,
+  building,
 }) => {
   const constructions = useSelector((state) => state.constructions.list);
   const history = useHistory();
@@ -23,9 +26,9 @@ const BuildingForm = ({
     if (type.length === 0) {
       return;
     }
-    if (currentBuilding) {
+    if (building && action === 'update') {
       updateABuilding({
-        _id: currentBuilding._id,
+        _id: building._id,
         name,
         address,
         type,
@@ -45,25 +48,34 @@ const BuildingForm = ({
     if (currentBuilding) {
       setUpdate(false);
     }
-    if (action !== 'delete' || !getBuilding(buildingId)) {
+    if (action !== 'delete' || !building) {
       history.push('/buildings');
-      setName('');
-      setAddress('');
-      setType('');
-      setPhone('');
     }
+    setName('');
+    setAddress('');
+    setType('');
+    setPhone('');
   };
 
   useEffect(() => {
-    if (currentBuilding) {
-      setName(currentBuilding.name);
-      setAddress(currentBuilding.address);
-      setType(currentBuilding.type);
-      setPhone(currentBuilding.phone);
+    if (action === 'update') {
+      getBuilding(buildingId);
     } else {
       handleReset();
     }
   }, [currentBuilding]);
+
+  useEffect(() => {
+    if (building && action === 'update') {
+      setUpdate(true);
+      setName(building.name);
+      setAddress(building.address);
+      setType(building.type);
+      setPhone(building.phone);
+    } else {
+      handleReset();
+    }
+  }, [building]);
 
   return (
     <div>
@@ -79,7 +91,7 @@ const BuildingForm = ({
               <input
                 type="text"
                 placeholder="Add name"
-                value={name}
+                value={name || ''}
                 onChange={(e) => setName(e.target.value)}
                 maxLength="15"
                 required
@@ -92,7 +104,7 @@ const BuildingForm = ({
               <input
                 type="text"
                 placeholder="Add address"
-                value={address}
+                value={address || ''}
                 onChange={(e) => setAddress(e.target.value)}
                 maxLength="16"
                 required
@@ -105,13 +117,13 @@ const BuildingForm = ({
               <select
                 required
                 onChange={(e) => setType(e.target.value)}
-                value={type}
+                value={type || ''}
                 name="type"
               >
                 <option value=""> </option>
                 {constructions.map((t) => {
                   return (
-                    <option key={t._id} value={t.id}>
+                    <option key={t._id} value={t._id}>
                       {t.name}
                     </option>
                   );
@@ -125,7 +137,7 @@ const BuildingForm = ({
               <input
                 type="text"
                 placeholder="Add phone"
-                value={phone}
+                value={phone || ''}
                 onChange={(e) => setPhone(e.target.value)}
                 required
               />
@@ -147,4 +159,17 @@ const BuildingForm = ({
   );
 };
 
-export default BuildingForm;
+const mapDispatchToProps = (dispatch) => {
+  return bindActionCreators(
+    {
+      getBuilding: getBuildingAction,
+    },
+    dispatch
+  );
+};
+
+const mapStateToProps = (state) => ({
+  building: state.buildings.building,
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(BuildingForm);

@@ -2,6 +2,9 @@ import {
   GET_BUILDINGS_FETCHING,
   GET_BUILDINGS_FULFILLED,
   GET_BUILDINGS_REJECTED,
+  GET_BUILDING_FETCHING,
+  GET_BUILDING_FULFILLED,
+  GET_BUILDING_REJECTED,
   ADD_BUILDING_FETCHING,
   ADD_BUILDING_FULFILLED,
   ADD_BUILDING_REJECTED,
@@ -16,6 +19,7 @@ import {
 const initialState = {
   isLoading: false,
   list: [],
+  building: {},
   error: false,
 };
 
@@ -93,6 +97,23 @@ const buildingReducer = (state = initialState, action) => {
         ],
       };
     case DELETE_BUILDING_REJECTED:
+      return {
+        ...state,
+        isLoading: false,
+        error: true,
+      };
+    case GET_BUILDING_FETCHING:
+      return {
+        ...state,
+        isLoading: true,
+      };
+    case GET_BUILDING_FULFILLED:
+      return {
+        ...state,
+        isLoading: false,
+        building: action.payload,
+      };
+    case GET_BUILDING_REJECTED:
       return {
         ...state,
         isLoading: false,
