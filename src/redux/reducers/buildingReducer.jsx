@@ -14,6 +14,7 @@ import {
   DELETE_BUILDING_FETCHING,
   DELETE_BUILDING_FULFILLED,
   DELETE_BUILDING_REJECTED,
+  RESET_BUILDING,
 } from '../types/buildingActionTypes';
 
 const initialState = {
@@ -118,6 +119,12 @@ const buildingReducer = (state = initialState, action) => {
         ...state,
         isLoading: false,
         error: true,
+      };
+    case RESET_BUILDING:
+      return {
+        ...state,
+        isLoading: false,
+        building: {},
       };
     default:
       return state;

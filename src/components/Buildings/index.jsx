@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import BuildingsList from './BuildingsList';
 import BuildingForm from './BuildingForm';
-import Modal from '../Shared/Modal';
+import DeleteModal from './DeleteModal';
 import styles from './buildings.module.css';
 import {
   getBuilding as getBuildingAction,
@@ -12,6 +12,8 @@ import {
   updateBuilding as updateBuildingAction,
   deleteBuilding as deleteBuildingAction,
 } from '../../redux/actions/buildingActions';
+import { showModal as showModalAction } from '../../redux/actions/modalActions';
+import modalTypes from '../../redux/types/modalTypes';
 
 const Buildings = ({
   buildings,
@@ -19,6 +21,8 @@ const Buildings = ({
   addBuilding,
   updateBuilding,
   deleteBuilding,
+  showModal,
+  modalType,
 }) => {
   const history = useHistory();
   const { action, buildingId } = useParams();
@@ -32,6 +36,7 @@ const Buildings = ({
   });
 
   const editBuilding = (building) => {
+    showModal(modalTypes.UPDATE_BUILDING);
     setUpdate(true);
     const id = building._id;
     history.push(`/buildings/update/${id}`);
@@ -60,20 +65,33 @@ const Buildings = ({
     history.replace('/buildings');
   };
 
+  const showAddModal = () => {
+    showModal(modalTypes.ADD_BUILDING);
+  };
+
+  const showDeleteModal = () => {
+    showModal(modalTypes.DELETE_BUILDING);
+  };
+
   return (
     <div className={styles.container}>
       <h2 className={styles.title}>Buildings</h2>
-      {update ? (
+      <button type="button" onClick={() => showAddModal()}>
+        Add Building
+      </button>
+      {modalType === 'ADD_BUILDING' && (
+        <div>
+          <BuildingForm onAdd={addBuilding} />
+        </div>
+      )}
+      {action === 'update' && (
         <div>
           <BuildingForm
             currentBuilding={currentBuilding}
             setUpdate={setUpdate}
             updateABuilding={updateABuilding}
+            update={update}
           />
-        </div>
-      ) : (
-        <div>
-          <BuildingForm onAdd={addBuilding} setUpdate={setUpdate} />
         </div>
       )}
       {buildings.isLoading ? <h3>LOADING...</h3> : null}
@@ -85,10 +103,13 @@ const Buildings = ({
         editBuilding={editBuilding}
       />
       {action === 'delete' && (
-        <Modal
+        <DeleteModal
           onSubmit={() => deleteABuilding(buildingId)}
           onClose={() => handleCancel()}
           item="building"
+          showDeleteModal={showDeleteModal}
+          getBuilding={getBuilding}
+          buildingId={buildingId}
         />
       )}
     </div>
@@ -102,6 +123,7 @@ const mapDispatchToProps = (dispatch) => {
       addBuilding: addBuildingAction,
       updateBuilding: updateBuildingAction,
       deleteBuilding: deleteBuildingAction,
+      showModal: showModalAction,
     },
     dispatch
   );
@@ -109,6 +131,7 @@ const mapDispatchToProps = (dispatch) => {
 
 const mapStateToProps = (state) => ({
   buildings: state.buildings,
+  modalType: state.modal.modalType,
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Buildings);

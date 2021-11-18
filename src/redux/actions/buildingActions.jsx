@@ -14,6 +14,7 @@ import {
   DELETE_BUILDING_FETCHING,
   DELETE_BUILDING_FULFILLED,
   DELETE_BUILDING_REJECTED,
+  RESET_BUILDING,
 } from '../types/buildingActionTypes';
 
 const URL = process.env.REACT_APP_BACKEND_URL;
@@ -159,3 +160,8 @@ export const getBuilding = (id) => (dispatch) => {
       dispatch(getBuildingRejected());
     });
 };
+
+export const resetBuilding = (payload) => ({
+  type: RESET_BUILDING,
+  payload,
+});
